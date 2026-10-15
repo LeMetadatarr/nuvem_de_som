@@ -15,11 +15,18 @@ dependencies = ["bs4", "requests", "mediavocab>=2.0.0a2"]
 anon = ["anon_requests"]
 yt-dlp = ["yt-dlp"]
 cli = ["click"]
+arr = ["arrkit>=0.1.0a2"]
 stealth = ["curl-cffi>=0.16.3b1", "unblock_requests>=0.2.0a3"]
 test = ["pytest", "vcrpy", "pytest-vcr", "click", "unblock_requests>=0.2.0a3"]
 
 [project.scripts]
 nds = "nuvem_de_som.cli:main"
+
+[project.entry-points."arrkit.indexers"]
+soundcloud = "nuvem_de_som.arr:SoundCloud"
+
+[project.entry-points."arrkit.clients"]
+soundcloud = "nuvem_de_som.arr:SoundCloudClient"
 
 [project.urls]
 Homepage = "https://github.com/LeMetadatarr/nuvem_de_som"
@@ -31,6 +38,7 @@ version = { attr = "nuvem_de_som.version.__version__" }
 include = ["nuvem_de_som*"]
 
 [tool.pytest.ini_options]
+testpaths = ["test"]
 markers = [
     "integration: tests that hit live network endpoints (deselect with -m 'not integration')",
 ]

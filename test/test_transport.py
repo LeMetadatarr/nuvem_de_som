@@ -37,10 +37,18 @@ def test_default_session_env_curl_cffi_skips_cloudflaresession(monkeypatch):
     """NUVEM_TRANSPORT=curl_cffi bypasses CloudflareSession entirely, even
     though unblock_requests is importable."""
     monkeypatch.setenv(transport_mod.ENV_VAR, transport_mod.CURL_CFFI)
-    from curl_cffi import requests as cffi_requests
+
+    class FakeCffiSession:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    fake = types.ModuleType("curl_cffi")
+    fake.requests = types.SimpleNamespace(Session=FakeCffiSession)
+    monkeypatch.setitem(sys.modules, "curl_cffi", fake)
 
     s = transport_mod.default_session()
-    assert isinstance(s, cffi_requests.Session)
+    assert isinstance(s, FakeCffiSession)
+    assert s.kwargs == {"impersonate": "chrome"}
 
 
 def test_default_session_falls_back_to_requests_when_unblock_requests_missing(monkeypatch):
