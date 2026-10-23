@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.0a1](https://github.com/LeMetadatarr/nuvem_de_som/tree/0.8.0a1) (2026-10-23)
+
+[Full Changelog](https://github.com/LeMetadatarr/nuvem_de_som/compare/0.7.0a1...0.8.0a1)
+
+**Merged pull requests:**
+
+- feat: register as an arrkit indexer and download client [\#38](https://github.com/LeMetadatarr/nuvem_de_som/pull/38) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.7.0a1](https://github.com/LeMetadatarr/nuvem_de_som/tree/0.7.0a1) (2026-09-01)
 
 [Full Changelog](https://github.com/LeMetadatarr/nuvem_de_som/compare/0.6.1a1...0.7.0a1)
