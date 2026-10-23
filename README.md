@@ -14,6 +14,7 @@ pip install "nuvem_de_som[yt-dlp]" # adds yt-dlp for download & stream fallback
 pip install "nuvem_de_som[cli]"    # adds the nds terminal app
 pip install "nuvem_de_som[yt-dlp,cli]"  # everything
 pip install "nuvem_de_som[stealth]"     # adds curl_cffi for browser-impersonating HTTP
+pip install nuvem_de_som                # inside an arrkit app's environment this also registers an indexer and download client (see docs/arrkit.md)
 ```
 
 ### Stealth transport (`curl_cffi`)
@@ -182,6 +183,7 @@ macOS.
 - [Transport](docs/transport.md)
 - [CLI reference](docs/cli.md)
 - [API extras: followers, following, reposts, crawl](docs/api.md)
+- [Use from an arrkit app](docs/arrkit.md)
 
 ## Related projects
 

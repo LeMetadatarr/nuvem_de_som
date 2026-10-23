@@ -10,6 +10,7 @@ pip install -e .[test]      # + pytest, vcrpy, pytest-vcr, click
 pip install -e .[yt-dlp]    # SoundCloudYTDLP backend + download/stream fallback
 pip install -e .[cli]       # nds terminal app (click)
 pip install -e .[stealth]   # curl_cffi browser impersonation transport
+pip install --find-links <arrkit wheel folder> -e .[arr]   # arrkit (not on PyPI), for the indexer and download client plugin
 ```
 
 ## Test
@@ -34,8 +35,10 @@ Ruff configured (CI `lint.yml` runs `OpenVoiceOS/gh-automations` lint with `ruff
 - `SoundCloudYTDLP` — yt-dlp backed; best stream resolution, owns its networking (ignores injected `session=`).
 - `SoundCloud` — orchestrator; tries API → yt-dlp → HTML, falls back on error; download methods delegate to the yt-dlp backend.
 - `nuvem_de_som/transport.py` — `default_session()`; returns `curl_cffi` impersonating Chrome when `NUVEM_TRANSPORT=curl_cffi` and `[stealth]` installed, else `requests.Session()`.
+- `nuvem_de_som/arr.py` — the arrkit indexer and download client (entry points `arrkit.indexers` / `arrkit.clients`, name `soundcloud`); imports arrkit, which the rest of the library never does. All its requests go through `arrkit.net` and a plain session handed to `SoundCloudAPI`; see `docs/arrkit.md`.
 - `nuvem_de_som/cli.py` — `nds` entry point (search/browse/play/download), `--backend api|html|ytdlp|auto`, `NDS_PLAYER` override.
 - `test/` — unit + VCR + CLI + license tests; `conftest.py` holds the VCR config.
+- `tests_arrkit/` — the arrkit plugin tests. arrkit is not on PyPI, so they are not in the `test` extra and not in CI's `test` path, and the root `conftest.py` leaves them out of collection below Python 3.12 (arrkit and `tomllib`): install arrkit from its wheel (`uv pip install --find-links <folder with the arrkit wheel> -e ".[arr]"`) and run `pytest tests_arrkit`.
 - `examples/` — numbered zero-to-hero scripts. `docs/` — per-topic reference.
 
 ## Conventions
