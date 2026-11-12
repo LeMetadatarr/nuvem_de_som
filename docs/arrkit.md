@@ -38,11 +38,13 @@ The client takes releases of protocol `soundcloud`. A grab is queued in the app'
 | `delay` | seconds between two requests to SoundCloud, and between two files of a set (default 2) |
 | `timeout` | seconds without data before a download fails (default 60) |
 
+A release address must be an https address on soundcloud.com with no whitespace, control character or backslash; anything else is not queued.
+
 A track is downloaded when all of these hold:
 
 - the uploader enabled downloads on it, or its licence is CC0 or a Creative Commons Attribution licence (CC-BY with any of the NC, ND and SA terms);
 - SoundCloud serves the full track: no Go+ restriction, no preview, no snipped stream;
-- a direct (progressive) stream exists. HLS-only tracks are refused, because a playlist file is not audio.
+- a direct (progressive) stream exists. A track whose data names no streams at all counts as having none; HLS-only tracks are refused, because a playlist file is not audio.
 
 The file is the stream copy the library resolves (the best progressive transcoding, whose codec and bitrate the release shows), not the uploader's original file, which the library cannot fetch. Refusals fail the job with the reason, for example `Slow Preview: SoundCloud Go+ restricted, only a preview or nothing is available` or `Slow Snow: the uploader has not enabled downloads and the licence (all-rights-reserved) does not allow copies`. Nothing circumvents a paywall, a preview limit or a bot check.
 

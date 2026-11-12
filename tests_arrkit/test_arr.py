@@ -417,6 +417,36 @@ class Grabbing(Base):
         self.assertIn("not audio", s["message"])
         self.assertEqual(os.listdir(os.path.join(self.tmp, "dl")), [])
 
+    def test_a_described_track_without_any_media_is_a_stream_and_fails_a_grab_with_a_reason(self):
+        bare = track(8, "Slow Bare")
+        del bare["media"]
+        self.site.tracks.append(bare)
+        release = self.release_of("slow bare")
+        self.assertEqual(release["kind"], "stream")
+        self.assertIn("progressive", release["refusal"])
+        s = self.grab(self.client(), dict(release, kind="download"))
+        self.assertEqual(s["state"], "failed")
+        self.assertIn("progressive", s["message"])
+        self.assertEqual(os.listdir(os.path.join(self.tmp, "dl")), [])
+
+    def test_a_release_address_that_a_browser_would_read_as_another_host_is_not_queued(self):
+        for url in ("https://evil.example\\@soundcloud.com/a/b", "https://soundcloud.com\\@evil.example/a/b"):
+            with self.subTest(url=url):
+                with self.assertRaisesRegex(ClientError, "soundcloud.com address"):
+                    self.client().add(dict(self.release_of("slow rain"), url=url))
+
+    def test_a_release_address_with_a_c0_control_character_is_not_queued(self):
+        for ch in ("\x01", "\x08", "\x0e", "\x1b"):
+            with self.subTest(ch=repr(ch)):
+                with self.assertRaisesRegex(ClientError, "soundcloud.com address"):
+                    self.client().add(dict(self.release_of("slow rain"), url="https://soundcloud.com/a/b" + ch))
+
+    def test_a_release_address_with_a_c1_control_character_is_not_queued(self):
+        for ch in ("\x80", "\x9b", "\x9f"):
+            with self.subTest(ch=repr(ch)):
+                with self.assertRaisesRegex(ClientError, "soundcloud.com address"):
+                    self.client().add(dict(self.release_of("slow rain"), url="https://soundcloud.com/a" + ch + "31m"))
+
     def test_an_http_error_from_the_stream_host_fails_without_the_query(self):
         self.files.routes.insert(0, ("GET", "/file/", (403, {}, b"no")))
         s = self.grab(self.client(), self.release_of("slow rain"))
