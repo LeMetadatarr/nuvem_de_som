@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.8.1a1](https://github.com/LeMetadatarr/nuvem_de_som/tree/0.8.1a1) (2026-11-14)
+
+[Full Changelog](https://github.com/LeMetadatarr/nuvem_de_som/compare/0.8.0a1...0.8.1a1)
+
+**Merged pull requests:**
+
+- fix: refuse streamless tracks and backslash addresses in the arrkit plugin [\#40](https://github.com/LeMetadatarr/nuvem_de_som/pull/40) ([JarbasAl](https://github.com/JarbasAl))
+
 ## [0.8.0a1](https://github.com/LeMetadatarr/nuvem_de_som/tree/0.8.0a1) (2026-10-23)
 
 [Full Changelog](https://github.com/LeMetadatarr/nuvem_de_som/compare/0.7.0a1...0.8.0a1)
