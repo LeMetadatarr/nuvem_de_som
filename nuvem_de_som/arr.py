@@ -168,7 +168,7 @@ def refusal(raw):
         return f"{title}: SoundCloud Go+ restricted, only a preview or nothing is available"
     if raw.get("streamable") is False:
         return f"{title}: SoundCloud does not stream this track"
-    if "media" in raw and not progressive(raw):
+    if not progressive(raw):
         return f"{title}: SoundCloud offers no direct (progressive) stream for this track, only HLS or none, which is not downloaded"
     license = _map_license(raw.get("license"))
     if not raw.get("downloadable") and not license.startswith(OPEN_LICENSES):
@@ -240,8 +240,9 @@ def read_capped(response, limit, sink, budget, cancelled=lambda: False, progress
 
 
 def clean(url):
-    """True when `url` holds no whitespace and no control character; nothing is stripped, an address with either is refused."""
-    return not re.search(r"[\s\x00-\x1f\x7f]", url)
+    """True when `url` holds no whitespace, control character or backslash; nothing is stripped, an address with one is refused. A backslash
+    is read as a slash by browsers and as a character by parsers, so the host it hides is not the same to both."""
+    return not re.search(r"[\s\x00-\x1f\x7f-\x9f\\]", url)
 
 
 class HttpsOnly(urllib.request.HTTPRedirectHandler):
